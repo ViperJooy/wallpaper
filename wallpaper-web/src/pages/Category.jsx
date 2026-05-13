@@ -1,0 +1,100 @@
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Container, Typography, IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
+import ImageGrid from '../components/gallery/ImageGrid';
+import ImageDetail from '../components/gallery/ImageDetail';
+import Loading from '../components/common/Loading';
+import EmptyState from '../components/common/EmptyState';
+import ErrorBoundary from '../components/common/ErrorBoundary';
+import { useWallpapers } from '../hooks/useWallpapers';
+import { BIRD_CATEGORIES } from '../constants/categories';
+
+function Category() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
+  const [detailOpen, setDetailOpen] = useState(false);
+
+  const category = BIRD_CATEGORIES.find(cat => cat.id === parseInt(id));
+  const { wallpapers, loading, hasMore, loadMore } = useWallpapers(parseInt(id), 1, 12);
+
+  const handleImageClick = (image) => {
+    const index = wallpapers.findIndex(img => img.id === image.id);
+    setSelectedImage(image);
+    setSelectedImageIndex(index);
+    setDetailOpen(true);
+  };
+
+  const handleDetailClose = () => {
+    setDetailOpen(false);
+    setSelectedImage(null);
+    setSelectedImageIndex(-1);
+  };
+
+  const handlePrevious = () => {
+    if (selectedImageIndex > 0) {
+      const prevImage = wallpapers[selectedImageIndex - 1];
+      setSelectedImage(prevImage);
+      setSelectedImageIndex(selectedImageIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (selectedImageIndex < wallpapers.length - 1) {
+      const nextImage = wallpapers[selectedImageIndex + 1];
+      setSelectedImage(nextImage);
+      setSelectedImageIndex(selectedImageIndex + 1);
+    }
+  };
+
+  return (
+    <ErrorBoundary>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Header />
+
+        <Container maxWidth="xl" sx={{ flex: 1, py: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
+            <IconButton onClick={() => navigate('/')}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h4" sx={{ fontWeight: 600 }}>
+              {category ? category.name : `分类 ${id}`}
+            </Typography>
+          </Box>
+
+          {loading && wallpapers.length === 0 ? (
+            <Loading />
+          ) : wallpapers.length === 0 ? (
+            <EmptyState title="该分类暂无壁纸" />
+          ) : (
+            <ImageGrid
+              images={wallpapers}
+              onLoadMore={loadMore}
+              hasMore={hasMore}
+              loading={loading}
+              onImageClick={handleImageClick}
+            />
+          )}
+        </Container>
+
+        <Footer />
+
+        <ImageDetail
+          image={selectedImage}
+          open={detailOpen}
+          onClose={handleDetailClose}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          hasPrevious={selectedImageIndex > 0}
+          hasNext={selectedImageIndex < wallpapers.length - 1}
+        />
+      </Box>
+    </ErrorBoundary>
+  );
+}
+
+export default Category;
