@@ -21,9 +21,10 @@ function Category() {
 
   const category = BIRD_CATEGORIES.find(cat => cat.id === parseInt(id));
   const { wallpapers, loading, hasMore, loadMore } = useWallpapers(parseInt(id), 1, 12);
+  const safeWallpapers = Array.isArray(wallpapers) ? wallpapers : [];
 
   const handleImageClick = (image) => {
-    const index = wallpapers.findIndex(img => img.id === image.id);
+    const index = safeWallpapers.findIndex(img => img.id === image.id);
     setSelectedImage(image);
     setSelectedImageIndex(index);
     setDetailOpen(true);
@@ -37,15 +38,15 @@ function Category() {
 
   const handlePrevious = () => {
     if (selectedImageIndex > 0) {
-      const prevImage = wallpapers[selectedImageIndex - 1];
+      const prevImage = safeWallpapers[selectedImageIndex - 1];
       setSelectedImage(prevImage);
       setSelectedImageIndex(selectedImageIndex - 1);
     }
   };
 
   const handleNext = () => {
-    if (selectedImageIndex < wallpapers.length - 1) {
-      const nextImage = wallpapers[selectedImageIndex + 1];
+    if (selectedImageIndex < safeWallpapers.length - 1) {
+      const nextImage = safeWallpapers[selectedImageIndex + 1];
       setSelectedImage(nextImage);
       setSelectedImageIndex(selectedImageIndex + 1);
     }
@@ -66,13 +67,13 @@ function Category() {
             </Typography>
           </Box>
 
-          {loading && wallpapers.length === 0 ? (
+          {loading && safeWallpapers.length === 0 ? (
             <Loading />
-          ) : wallpapers.length === 0 ? (
+          ) : safeWallpapers.length === 0 ? (
             <EmptyState title="该分类暂无壁纸" />
           ) : (
             <ImageGrid
-              images={wallpapers}
+              images={safeWallpapers}
               onLoadMore={loadMore}
               hasMore={hasMore}
               loading={loading}
@@ -90,7 +91,7 @@ function Category() {
           onPrevious={handlePrevious}
           onNext={handleNext}
           hasPrevious={selectedImageIndex > 0}
-          hasNext={selectedImageIndex < wallpapers.length - 1}
+          hasNext={selectedImageIndex < safeWallpapers.length - 1}
         />
       </Box>
     </ErrorBoundary>

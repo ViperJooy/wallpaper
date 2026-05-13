@@ -23,7 +23,9 @@ function Home() {
   const { results: searchResults, loading: searchLoading, hasMore: searchHasMore, search, loadMore: loadMoreSearch } = useSearch('', 12);
 
   const isSearching = searchKeyword.trim().length > 0;
-  const displayImages = isSearching ? searchResults : wallpapers;
+  const displayImages = Array.isArray(isSearching ? searchResults : wallpapers)
+    ? (isSearching ? searchResults : wallpapers)
+    : [];
   const loading = isSearching ? searchLoading : wallpapersLoading;
   const hasMore = isSearching ? searchHasMore : wallpapersHasMore;
 
