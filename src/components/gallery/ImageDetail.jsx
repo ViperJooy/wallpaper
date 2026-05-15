@@ -15,7 +15,7 @@ import { downloadImage } from '../../utils/download';
 import { useAppContext } from '../../context/AppContext';
 
 function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, hasNext }) {
-  const { t } = useAppContext();
+  const { t, darkMode } = useAppContext();
   const touchStartX = useRef(null);
 
   const handleDownload = useCallback(async () => {
@@ -175,10 +175,10 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
           {image.tag && (
             <Chip
               label={image.tag}
-              sx={(theme) => ({
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                color: theme.palette.mode === 'dark' ? '#fff' : 'inherit',
-              })}
+              sx={{
+                backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                color: darkMode ? '#fff' : 'inherit',
+              }}
             />
           )}
 

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
 function SearchBar({ value = '', onChange, onSearch, placeholder = '搜索壁纸...' }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const [localValue, setLocalValue] = useState(value);
 
   const handleChange = (e) => {
@@ -40,7 +43,7 @@ function SearchBar({ value = '', onChange, onSearch, placeholder = '搜索壁纸
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon sx={(theme) => ({ color: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.85)' : 'text.secondary' })} />
+            <SearchIcon sx={{ color: isDark ? 'rgba(255,255,255,0.85)' : 'text.secondary' }} />
           </InputAdornment>
         ),
         endAdornment: (

@@ -7,10 +7,12 @@ import Footer from '../components/layout/Footer';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import { downloadImage } from '../utils/download';
 import { getFullUrl } from '../utils/imageUrl';
+import { useAppContext } from '../context/AppContext';
 
 function ImageDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { darkMode } = useAppContext();
 
   const handleDownload = async () => {
     const imageUrl = getFullUrl(id);
@@ -70,7 +72,7 @@ function ImageDetail() {
               />
 
               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                <Chip label={`图片 ID: ${id}`} sx={(theme) => ({ backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)', color: theme.palette.mode === 'dark' ? '#fff' : 'inherit' })} />
+                <Chip label={`图片 ID: ${id}`} sx={{ backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)', color: darkMode ? '#fff' : 'inherit' }} />
                 <Button variant="contained" startIcon={<DownloadIcon />} onClick={handleDownload}>
                   下载壁纸
                 </Button>
