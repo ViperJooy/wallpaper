@@ -13,8 +13,10 @@ export function getThumbUrl(url) {
   return url;
 }
 
+const BASE = import.meta.env.VITE_API_BASE_URL || 'https://wp.shanhutech.cn/intf';
+
 export function getFullUrl(id) {
   if (!id) return '';
   if (id.startsWith('http')) return id;
-  return `https://wp.shanhutech.cn/intf/image/${id}`;
+  return `${BASE}/image/${id}`;
 }

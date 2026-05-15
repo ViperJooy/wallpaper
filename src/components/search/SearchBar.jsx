@@ -40,7 +40,7 @@ function SearchBar({ value = '', onChange, onSearch, placeholder = '搜索壁纸
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon sx={{ color: 'text.secondary' }} />
+            <SearchIcon sx={(theme) => ({ color: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.85)' : 'text.secondary' })} />
           </InputAdornment>
         ),
         endAdornment: (

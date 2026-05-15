@@ -9,6 +9,13 @@ export default defineConfig({
     sourcemap: true,
   },
   server: {
-    port: 5173,
+    host: true,
+    port: 5500,
+    proxy: {
+      '/intf': {
+        target: 'https://wp.shanhutech.cn',
+        changeOrigin: true,
+      },
+    },
   },
 })
