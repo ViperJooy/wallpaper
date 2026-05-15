@@ -16,6 +16,7 @@
     "@mui/material": "^9.0.1",
     "@playwright/mcp": "^0.0.75",
     "axios": "^1.16.0",
+    "jszip": "^3.10.1",
     "playwright": "^1.60.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

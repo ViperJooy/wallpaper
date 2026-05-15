@@ -10,19 +10,20 @@ import SkeletonGrid from '../components/common/SkeletonGrid';
 import EmptyState from '../components/common/EmptyState';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import { useWallpapers } from '../hooks/useWallpapers';
-import { BIRD_CATEGORIES } from '../constants/categories';
+import { BIRD_CATEGORIES, QING_CATEGORIES } from '../constants/categories';
 import { useAppContext } from '../context/AppContext';
 
 function Category() {
-  const { t } = useAppContext();
+  const { t, currentSource } = useAppContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const category = BIRD_CATEGORIES.find(cat => cat.id === parseInt(id));
-  const { wallpapers, loading, error, hasMore, loadMore, refresh } = useWallpapers(parseInt(id), 1, 12);
+  const categories = currentSource === 'qing' ? QING_CATEGORIES : BIRD_CATEGORIES;
+  const category = categories.find(cat => cat.id === parseInt(id));
+  const { wallpapers, loading, error, hasMore, loadMore, refresh } = useWallpapers(currentSource, parseInt(id), 1, 12);
   const safeWallpapers = Array.isArray(wallpapers) ? wallpapers : [];
 
   const handleImageClick = (image) => {

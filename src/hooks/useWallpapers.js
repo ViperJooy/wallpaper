@@ -1,14 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { birdApi } from '../services/birdApi';
+import { fetchBingData, filterByMonth } from '../services/bingService';
+import { fetch360Category } from '../services/qingService';
 
 const LOADING_TIMEOUT = 15000;
 
-export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
+export const useWallpapers = (source = 'bird', categoryId = null, initialPage = 1, count = 12, month = 'all') => {
   const [wallpapers, setWallpapers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(initialPage);
+  const allDataRef = useRef([]);
   const abortRef = useRef(null);
   const loadingTimerRef = useRef(null);
   const mountedRef = useRef(true);
@@ -27,6 +30,9 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
     const controller = new AbortController();
     abortRef.current = controller;
 
+    if (!append) {
+      setWallpapers([]);
+    }
     setLoading(true);
     setError(null);
 
@@ -40,27 +46,57 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
     }, LOADING_TIMEOUT);
 
     try {
-      const data = await birdApi.getByCategory(categoryId, pageNum, count, controller.signal);
+      let data;
+
+      if (source === 'bird') {
+        data = await birdApi.getByCategory(categoryId, pageNum, count, controller.signal);
+      } else if (source === 'bing') {
+        if (allDataRef.current.length === 0) {
+          allDataRef.current = await fetchBingData(controller.signal);
+        }
+        const filtered = filterByMonth(allDataRef.current, month);
+        data = {
+          data: {
+            list: filtered.slice(0, pageNum * count),
+            total_count: filtered.length,
+          }
+        };
+      } else if (source === 'qing') {
+        if (allDataRef.current.length === 0) {
+          allDataRef.current = await fetch360Category(categoryId, controller.signal);
+        }
+        data = {
+          data: {
+            list: allDataRef.current.slice(0, pageNum * count),
+            total_count: allDataRef.current.length,
+          }
+        };
+      }
 
       if (!mountedRef.current) return;
-
       clearLoadingTimeout();
 
-      if (data && data.data && data.data.list) {
-        const newWallpapers = data.data.list;
+      if (data && data.data) {
+        const newWallpapers = data.data.list || [];
 
-        if (append) {
-          setWallpapers(prev => {
-            const existingIds = new Set(prev.map(w => w.id));
-            const uniqueNew = newWallpapers.filter(w => !existingIds.has(w.id));
-            return [...prev, ...uniqueNew];
-          });
+        if (source === 'bird') {
+          if (append) {
+            setWallpapers(prev => {
+              const existingIds = new Set(prev.map(w => w.id));
+              const uniqueNew = newWallpapers.filter(w => !existingIds.has(w.id));
+              return [...prev, ...uniqueNew];
+            });
+          } else {
+            setWallpapers(newWallpapers);
+          }
+          setHasMore(newWallpapers.length === count);
         } else {
           setWallpapers(newWallpapers);
+          const total = data.data.total_count || 0;
+          setHasMore(pageNum * count < total);
         }
-
-        setHasMore(newWallpapers.length === count);
       } else {
+        if (!append) setWallpapers([]);
         setHasMore(false);
       }
     } catch (err) {
@@ -73,7 +109,7 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
         setLoading(false);
       }
     }
-  }, [categoryId, count, clearLoadingTimeout]);
+  }, [source, categoryId, count, month, clearLoadingTimeout]);
 
   const loadMore = useCallback(() => {
     if (!loading && hasMore) {
@@ -85,7 +121,7 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
 
   const refresh = useCallback(() => {
     pageRef.current = 1;
-    setWallpapers([]);
+    allDataRef.current = [];
     setError(null);
     setHasMore(true);
     fetchWallpapers(1, false);
@@ -94,6 +130,7 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
   useEffect(() => {
     mountedRef.current = true;
     pageRef.current = initialPage;
+    allDataRef.current = [];
     clearLoadingTimeout();
     queueMicrotask(() => fetchWallpapers(initialPage, false));
 
@@ -105,7 +142,7 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryId]);
+  }, [source, categoryId, month]);
 
   return {
     wallpapers,

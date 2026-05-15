@@ -28,6 +28,9 @@ export const AppProvider = ({ children }) => {
     return localStorage.getItem('lang') || 'zh';
   });
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentSource, setCurrentSource] = useState(() => {
+    return localStorage.getItem('source') || 'bird';
+  });
 
   const t = useCallback((path) => translate(lang, path), [lang]);
   const toggleLang = useCallback(() => {
@@ -52,6 +55,11 @@ export const AppProvider = ({ children }) => {
   const handleSetTheme = useCallback((name) => {
     setThemeName(name);
     localStorage.setItem('theme', name);
+  }, []);
+
+  const handleSetSource = useCallback((source) => {
+    setCurrentSource(source);
+    localStorage.setItem('source', source);
   }, []);
 
   const [currentCategory, setCurrentCategory] = useState(null);
@@ -84,6 +92,8 @@ export const AppProvider = ({ children }) => {
     t,
     searchKeyword,
     setSearchKeyword,
+    currentSource,
+    setCurrentSource: handleSetSource,
     currentCategory,
     setCurrentCategory,
     searchHistory,

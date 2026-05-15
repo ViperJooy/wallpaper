@@ -17,8 +17,28 @@ apiClient.interceptors.request.use(
   }
 );
 
+function upgradeHttpUrls(obj) {
+  if (typeof obj === 'string') {
+    return obj.replace(/^http:\/\//, 'https://');
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(upgradeHttpUrls);
+  }
+  if (obj && typeof obj === 'object') {
+    const result = {};
+    for (const key of Object.keys(obj)) {
+      result[key] = upgradeHttpUrls(obj[key]);
+    }
+    return result;
+  }
+  return obj;
+}
+
 apiClient.interceptors.response.use(
   (response) => {
+    if (response.data && response.data.data && response.data.data.list) {
+      response.data = upgradeHttpUrls(response.data);
+    }
     return response;
   },
   (error) => {

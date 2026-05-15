@@ -18,3 +18,25 @@ export const BIRD_CATEGORIES = [
   { id: 13, name: '节日美图', icon: 'celebration' },
   { id: 18, name: 'BABY秀', icon: 'child_care' },
 ];
+
+export const QING_CATEGORIES = [
+  { id: 36, name: '4K专区', icon: '4k' },
+  { id: 6, name: '美女模特', icon: 'person' },
+  { id: 30, name: '爱情美图', icon: 'favorite' },
+  { id: 9, name: '风景大片', icon: 'landscape' },
+  { id: 15, name: '小清新', icon: 'eco' },
+  { id: 26, name: '动漫卡通', icon: 'animation' },
+  { id: 5, name: '游戏壁纸', icon: 'sports_esports' },
+  { id: 12, name: '汽车天下', icon: 'directions_car' },
+  { id: 14, name: '萌宠动物', icon: 'pets' },
+  { id: 7, name: '影视剧照', icon: 'movie' },
+  { id: 11, name: '明星风尚', icon: 'star' },
+  { id: 22, name: '军事天地', icon: 'military_tech' },
+  { id: 16, name: '劲爆体育', icon: 'sports_soccer' },
+  { id: 29, name: '月历壁纸', icon: 'calendar_month' },
+  { id: 10, name: '炫酷时尚', icon: 'palette' },
+  { id: 35, name: '文字控', icon: 'text_fields' },
+  { id: 13, name: '节日美图', icon: 'celebration' },
+  { id: 18, name: 'BABY秀', icon: 'child_care' },
+  { id: 32, name: '纹理', icon: 'texture' },
+];

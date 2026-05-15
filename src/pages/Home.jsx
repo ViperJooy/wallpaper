@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Box, Container, Typography, Chip, Stack } from '@mui/material';
+import { useState } from 'react';
+import { Box, Container, Typography, Chip, Stack, Tabs, Tab } from '@mui/material';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import SearchBar from '../components/search/SearchBar';
@@ -11,24 +11,26 @@ import ErrorBoundary from '../components/common/ErrorBoundary';
 import { useWallpapers } from '../hooks/useWallpapers';
 import { useSearch } from '../hooks/useSearch';
 import { useAppContext } from '../context/AppContext';
-import { BIRD_CATEGORIES } from '../constants/categories';
-
-const RECOMMENDED_CATEGORIES = [36, 9, 26, 5, 14, 6];
+import { BIRD_CATEGORIES, QING_CATEGORIES } from '../constants/categories';
+import { SOURCES, BING_MONTHS } from '../constants/sources';
 
 function Home() {
-  const { searchKeyword, setSearchKeyword, t } = useAppContext();
+  const { searchKeyword, setSearchKeyword, t, currentSource, setCurrentSource } = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [categoryId, setCategoryId] = useState(36);
 
-  const categoryList = useMemo(
-    () => RECOMMENDED_CATEGORIES.map(id => BIRD_CATEGORIES.find(c => c.id === id)).filter(Boolean),
-    []
-  );
+  const [birdCategoryId, setBirdCategoryId] = useState(36);
+  const [qingCategoryId, setQingCategoryId] = useState(36);
+  const [bingMonth, setBingMonth] = useState('all');
 
-  const { wallpapers, loading: wallpapersLoading, error: wallpapersError, hasMore: wallpapersHasMore, loadMore: loadMoreWallpapers, refresh: refreshWallpapers } = useWallpapers(categoryId, 1, 20);
-  const { results: searchResults, loading: searchLoading, error: searchError, hasMore: searchHasMore, search, loadMore: loadMoreSearch } = useSearch('', 12);
+  const categoryId = currentSource === 'qing' ? qingCategoryId : birdCategoryId;
+
+  const { wallpapers, loading: wallpapersLoading, error: wallpapersError, hasMore: wallpapersHasMore, loadMore: loadMoreWallpapers, refresh: refreshWallpapers } =
+    useWallpapers(currentSource, categoryId, 1, currentSource === 'bird' ? 20 : 30, bingMonth);
+
+  const { results: searchResults, loading: searchLoading, error: searchError, hasMore: searchHasMore, search, loadMore: loadMoreSearch } =
+    useSearch(currentSource, categoryId, '', 12);
 
   const isSearching = searchKeyword.trim().length > 0;
   const displayImages = Array.isArray(isSearching ? searchResults : wallpapers)
@@ -37,6 +39,11 @@ function Home() {
   const loading = isSearching ? searchLoading : wallpapersLoading;
   const hasMore = isSearching ? searchHasMore : wallpapersHasMore;
   const error = isSearching ? searchError : wallpapersError;
+
+  const handleSourceChange = (_, newValue) => {
+    setCurrentSource(newValue);
+    setSearchKeyword('');
+  };
 
   const handleSearchChange = (value) => {
     setSearchKeyword(value);
@@ -84,6 +91,14 @@ function Home() {
     }
   };
 
+  const showCategories = !isSearching && (
+    currentSource === 'bird' || currentSource === 'qing'
+  );
+
+  const currentCategories = currentSource === 'qing' ? QING_CATEGORIES : BIRD_CATEGORIES;
+  const currentCatId = currentSource === 'qing' ? qingCategoryId : birdCategoryId;
+  const setCurrentCatId = currentSource === 'qing' ? setQingCategoryId : setBirdCategoryId;
+
   return (
     <ErrorBoundary>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -93,7 +108,7 @@ function Home() {
           sx={(theme) => ({
             background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.light} 100%)`,
             color: 'white',
-            py: { xs: 6, md: 8 },
+            py: { xs: 4, md: 6 },
             px: 2,
           })}
         >
@@ -126,19 +141,50 @@ function Home() {
         </Box>
 
         <Container maxWidth="xl" sx={{ flex: 1, py: 4 }}>
-          {!isSearching && (
+          <Tabs
+            value={currentSource}
+            onChange={handleSourceChange}
+            centered
+            sx={{ mb: 3 }}
+          >
+            {SOURCES.map(s => (
+              <Tab key={s.id} value={s.id} label={s.label} />
+            ))}
+          </Tabs>
+
+          {!isSearching && showCategories && (
             <>
               <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
                 {t('app.hotRecommend')}
               </Typography>
               <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
-                {categoryList.map(cat => (
+                {currentCategories.map(cat => (
                   <Chip
                     key={cat.id}
                     label={cat.name}
-                    variant={categoryId === cat.id ? 'filled' : 'outlined'}
-                    color={categoryId === cat.id ? 'primary' : 'default'}
-                    onClick={() => setCategoryId(cat.id)}
+                    variant={currentCatId === cat.id ? 'filled' : 'outlined'}
+                    color={currentCatId === cat.id ? 'primary' : 'default'}
+                    onClick={() => setCurrentCatId(cat.id)}
+                    clickable
+                  />
+                ))}
+              </Stack>
+            </>
+          )}
+
+          {!isSearching && currentSource === 'bing' && (
+            <>
+              <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+                {t('app.hotRecommend')}
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+                {BING_MONTHS.map(m => (
+                  <Chip
+                    key={m.id}
+                    label={m.label}
+                    variant={bingMonth === m.id ? 'filled' : 'outlined'}
+                    color={bingMonth === m.id ? 'primary' : 'default'}
+                    onClick={() => setBingMonth(m.id)}
                     clickable
                   />
                 ))}
