@@ -4,7 +4,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { AppProvider } from './context/AppContext'
 import { theme } from './theme/theme'
-import './index.css'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

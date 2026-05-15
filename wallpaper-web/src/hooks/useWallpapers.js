@@ -1,27 +1,60 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { birdApi } from '../services/birdApi';
+
+const LOADING_TIMEOUT = 15000;
 
 export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
   const [wallpapers, setWallpapers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(initialPage);
   const [hasMore, setHasMore] = useState(true);
+  const pageRef = useRef(initialPage);
+  const abortRef = useRef(null);
+  const loadingTimerRef = useRef(null);
+  const mountedRef = useRef(true);
+
+  const clearLoadingTimeout = useCallback(() => {
+    if (loadingTimerRef.current) {
+      clearTimeout(loadingTimerRef.current);
+      loadingTimerRef.current = null;
+    }
+  }, []);
 
   const fetchWallpapers = useCallback(async (pageNum, append = false) => {
-    if (loading) return;
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     setLoading(true);
     setError(null);
 
-    try {
-      const data = await birdApi.getByCategory(categoryId, pageNum, count);
+    clearLoadingTimeout();
+    loadingTimerRef.current = setTimeout(() => {
+      if (mountedRef.current) {
+        setError('请求超时，请检查网络后重试');
+        setLoading(false);
+        controller.abort();
+      }
+    }, LOADING_TIMEOUT);
 
-      if (data && data.data) {
-        const newWallpapers = data.data;
+    try {
+      const data = await birdApi.getByCategory(categoryId, pageNum, count, controller.signal);
+
+      if (!mountedRef.current) return;
+
+      clearLoadingTimeout();
+
+      if (data && data.data && data.data.list) {
+        const newWallpapers = data.data.list;
 
         if (append) {
-          setWallpapers(prev => [...prev, ...newWallpapers]);
+          setWallpapers(prev => {
+            const existingIds = new Set(prev.map(w => w.id));
+            const uniqueNew = newWallpapers.filter(w => !existingIds.has(w.id));
+            return [...prev, ...uniqueNew];
+          });
         } else {
           setWallpapers(newWallpapers);
         }
@@ -31,30 +64,47 @@ export const useWallpapers = (categoryId, initialPage = 1, count = 12) => {
         setHasMore(false);
       }
     } catch (err) {
+      if (!mountedRef.current) return;
+      if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') return;
+      clearLoadingTimeout();
       setError(err.message || '加载失败');
-      console.error('Error fetching wallpapers:', err);
     } finally {
-      setLoading(false);
+      if (mountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [categoryId, count, loading]);
+  }, [categoryId, count, clearLoadingTimeout]);
 
   const loadMore = useCallback(() => {
     if (!loading && hasMore) {
-      const nextPage = page + 1;
-      setPage(nextPage);
+      const nextPage = pageRef.current + 1;
+      pageRef.current = nextPage;
       fetchWallpapers(nextPage, true);
     }
-  }, [page, loading, hasMore, fetchWallpapers]);
+  }, [loading, hasMore, fetchWallpapers]);
 
   const refresh = useCallback(() => {
-    setPage(1);
+    pageRef.current = 1;
     setWallpapers([]);
+    setError(null);
     setHasMore(true);
     fetchWallpapers(1, false);
   }, [fetchWallpapers]);
 
   useEffect(() => {
-    fetchWallpapers(page, false);
+    mountedRef.current = true;
+    pageRef.current = initialPage;
+    clearLoadingTimeout();
+    queueMicrotask(() => fetchWallpapers(initialPage, false));
+
+    return () => {
+      mountedRef.current = false;
+      clearLoadingTimeout();
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);
 
   return {

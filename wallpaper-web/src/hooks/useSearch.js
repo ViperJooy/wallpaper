@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { birdApi } from '../services/birdApi';
 
+const SEARCH_TIMEOUT = 15000;
+
 export const useSearch = (initialKeyword = '', count = 12) => {
   const [keyword, setKeyword] = useState(initialKeyword);
   const [results, setResults] = useState([]);
@@ -10,6 +12,16 @@ export const useSearch = (initialKeyword = '', count = 12) => {
   const [hasMore, setHasMore] = useState(true);
 
   const debounceTimer = useRef(null);
+  const loadingTimerRef = useRef(null);
+  const abortRef = useRef(null);
+  const mountedRef = useRef(true);
+
+  const clearLoadingTimeout = useCallback(() => {
+    if (loadingTimerRef.current) {
+      clearTimeout(loadingTimerRef.current);
+      loadingTimerRef.current = null;
+    }
+  }, []);
 
   const performSearch = useCallback(async (searchKeyword, pageNum, append = false) => {
     if (!searchKeyword.trim()) {
@@ -18,17 +30,40 @@ export const useSearch = (initialKeyword = '', count = 12) => {
       return;
     }
 
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
 
-    try {
-      const data = await birdApi.search(searchKeyword, pageNum, count);
+    clearLoadingTimeout();
+    loadingTimerRef.current = setTimeout(() => {
+      if (mountedRef.current) {
+        setError('搜索超时，请检查网络后重试');
+        setLoading(false);
+        controller.abort();
+      }
+    }, SEARCH_TIMEOUT);
 
-      if (data && data.data) {
-        const newResults = data.data;
+    try {
+      const data = await birdApi.search(searchKeyword, pageNum, count, controller.signal);
+
+      if (!mountedRef.current) return;
+
+      clearLoadingTimeout();
+
+      if (data && data.data && data.data.list) {
+        const newResults = data.data.list;
 
         if (append) {
-          setResults(prev => [...prev, ...newResults]);
+          setResults(prev => {
+            const existingIds = new Set(prev.map(r => r.id));
+            const uniqueNew = newResults.filter(r => !existingIds.has(r.id));
+            return [...prev, ...uniqueNew];
+          });
         } else {
           setResults(newResults);
         }
@@ -38,17 +73,23 @@ export const useSearch = (initialKeyword = '', count = 12) => {
         setHasMore(false);
       }
     } catch (err) {
+      if (!mountedRef.current) return;
+      if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') return;
+      clearLoadingTimeout();
       setError(err.message || '搜索失败');
       console.error('Error searching:', err);
     } finally {
-      setLoading(false);
+      if (mountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [count]);
+  }, [count, clearLoadingTimeout]);
 
   const search = useCallback((newKeyword) => {
     setKeyword(newKeyword);
     setPage(1);
     setResults([]);
+    setError(null);
     setHasMore(true);
 
     if (debounceTimer.current) {
@@ -78,15 +119,25 @@ export const useSearch = (initialKeyword = '', count = 12) => {
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
-  }, []);
+    clearLoadingTimeout();
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+  }, [clearLoadingTimeout]);
 
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
+      mountedRef.current = false;
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
       }
+      clearLoadingTimeout();
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
     };
-  }, []);
+  }, [clearLoadingTimeout]);
 
   return {
     keyword,

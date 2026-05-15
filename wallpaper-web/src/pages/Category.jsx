@@ -20,7 +20,7 @@ function Category() {
   const [detailOpen, setDetailOpen] = useState(false);
 
   const category = BIRD_CATEGORIES.find(cat => cat.id === parseInt(id));
-  const { wallpapers, loading, hasMore, loadMore } = useWallpapers(parseInt(id), 1, 12);
+  const { wallpapers, loading, error, hasMore, loadMore, refresh } = useWallpapers(parseInt(id), 1, 12);
   const safeWallpapers = Array.isArray(wallpapers) ? wallpapers : [];
 
   const handleImageClick = (image) => {
@@ -67,7 +67,9 @@ function Category() {
             </Typography>
           </Box>
 
-          {loading && safeWallpapers.length === 0 ? (
+          {error && safeWallpapers.length === 0 ? (
+            <EmptyState title="加载失败" description={error} actionLabel="重试" onAction={refresh} />
+          ) : loading && safeWallpapers.length === 0 ? (
             <Loading />
           ) : safeWallpapers.length === 0 ? (
             <EmptyState title="该分类暂无壁纸" />

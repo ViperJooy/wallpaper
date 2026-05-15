@@ -24,7 +24,7 @@ const setCache = (key, data) => {
 };
 
 export const birdApi = {
-  async getByCategory(categoryId, page = 1, count = 12) {
+  async getByCategory(categoryId, page = 1, count = 12, signal = null) {
     const cacheKey = getCacheKey('GetListByCategory', { categoryId, page, count });
     const cached = getFromCache(cacheKey);
     if (cached) {
@@ -37,13 +37,14 @@ export const birdApi = {
         pageno: page,
         count,
       },
+      signal,
     });
 
     setCache(cacheKey, response.data);
     return response.data;
   },
 
-  async search(keyword, page = 1, count = 12) {
+  async search(keyword, page = 1, count = 12, signal = null) {
     const cacheKey = getCacheKey('search', { keyword, page, count });
     const cached = getFromCache(cacheKey);
     if (cached) {
@@ -52,10 +53,11 @@ export const birdApi = {
 
     const response = await apiClient.get('/search', {
       params: {
-        content: encodeURIComponent(keyword),
+        content: keyword,
         pageno: page,
         count,
       },
+      signal,
     });
 
     setCache(cacheKey, response.data);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardMedia, CardContent, Box, Chip, IconButton, Tooltip } from '@mui/material';
+import { Card, CardMedia, Box, Chip, IconButton, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { downloadImage } from '../../utils/download';

@@ -19,8 +19,8 @@ function Home() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const { wallpapers, loading: wallpapersLoading, hasMore: wallpapersHasMore, loadMore: loadMoreWallpapers } = useWallpapers(36, 1, 20);
-  const { results: searchResults, loading: searchLoading, hasMore: searchHasMore, search, loadMore: loadMoreSearch } = useSearch('', 12);
+  const { wallpapers, loading: wallpapersLoading, error: wallpapersError, hasMore: wallpapersHasMore, loadMore: loadMoreWallpapers, refresh: refreshWallpapers } = useWallpapers(36, 1, 20);
+  const { results: searchResults, loading: searchLoading, error: searchError, hasMore: searchHasMore, search, loadMore: loadMoreSearch } = useSearch('', 12);
 
   const isSearching = searchKeyword.trim().length > 0;
   const displayImages = Array.isArray(isSearching ? searchResults : wallpapers)
@@ -28,6 +28,7 @@ function Home() {
     : [];
   const loading = isSearching ? searchLoading : wallpapersLoading;
   const hasMore = isSearching ? searchHasMore : wallpapersHasMore;
+  const error = isSearching ? searchError : wallpapersError;
 
   const handleSearchChange = (value) => {
     setSearchKeyword(value);
@@ -119,7 +120,14 @@ function Home() {
             {isSearching ? `搜索结果: "${searchKeyword}"` : '热门推荐'}
           </Typography>
 
-          {loading && displayImages.length === 0 ? (
+          {error && displayImages.length === 0 ? (
+            <EmptyState
+              title="加载失败"
+              description={error}
+              actionLabel="重试"
+              onAction={isSearching ? () => search(searchKeyword) : refreshWallpapers}
+            />
+          ) : loading && displayImages.length === 0 ? (
             <Loading />
           ) : displayImages.length === 0 ? (
             <EmptyState
