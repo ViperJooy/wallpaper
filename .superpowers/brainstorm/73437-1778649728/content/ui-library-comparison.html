@@ -1,0 +1,131 @@
+<h2>UI 组件库对比</h2>
+<p class="subtitle">同样的搜索优先布局,使用不同组件库的视觉效果</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">A. Ant Design 风格</div>
+    <div class="mockup-body" style="background: #f0f2f5; padding: 30px 20px;">
+      <!-- Hero Section -->
+      <div style="background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%); padding: 50px 30px; border-radius: 2px; margin-bottom: 24px;">
+        <div style="text-align: center; color: white;">
+          <h2 style="margin: 0 0 8px 0; font-size: 32px; font-weight: 600;">发现精美壁纸</h2>
+          <p style="margin: 0 0 24px 0; opacity: 0.9; font-size: 16px;">搜索数万张高清壁纸</p>
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; background: white; border-radius: 2px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+              <input placeholder="搜索风景、美女、动漫..." style="flex: 1; border: none; padding: 12px 16px; font-size: 14px; outline: none;">
+              <button style="background: #1890ff; color: white; border: none; padding: 12px 24px; cursor: pointer; font-weight: 500;">搜索</button>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 16px;">
+            <span style="padding: 4px 12px; background: white; color: #1890ff; border-radius: 2px; font-size: 12px; font-weight: 500;">Bird</span>
+            <span style="padding: 4px 12px; background: rgba(255,255,255,0.2); color: white; border-radius: 2px; font-size: 12px;">Bing</span>
+            <span style="padding: 4px 12px; background: rgba(255,255,255,0.2); color: white; border-radius: 2px; font-size: 12px;">360</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div style="background: white; padding: 24px; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+        <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: rgba(0,0,0,0.85);">热门推荐</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+          <div style="position: relative; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.5)); padding: 8px; color: white; font-size: 12px;">风景</div>
+          </div>
+          <div style="position: relative; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.5)); padding: 8px; color: white; font-size: 12px;">美女</div>
+          </div>
+          <div style="position: relative; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.5)); padding: 8px; color: white; font-size: 12px;">动漫</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">B. Material-UI 风格</div>
+    <div class="mockup-body" style="background: #fafafa; padding: 30px 20px;">
+      <!-- Hero Section -->
+      <div style="background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%); padding: 50px 30px; border-radius: 4px; margin-bottom: 24px; box-shadow: 0 3px 5px rgba(0,0,0,0.2);">
+        <div style="text-align: center; color: white;">
+          <h2 style="margin: 0 0 8px 0; font-size: 32px; font-weight: 400; letter-spacing: 0.5px;">发现精美壁纸</h2>
+          <p style="margin: 0 0 24px 0; opacity: 0.9; font-size: 16px; font-weight: 300;">搜索数万张高清壁纸</p>
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+              <input placeholder="搜索风景、美女、动漫..." style="flex: 1; border: none; padding: 14px 16px; font-size: 14px; outline: none; font-family: Roboto, sans-serif;">
+              <button style="background: #1976d2; color: white; border: none; padding: 14px 28px; cursor: pointer; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 13px;">搜索</button>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 16px;">
+            <span style="padding: 6px 16px; background: white; color: #1976d2; border-radius: 16px; font-size: 12px; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">Bird</span>
+            <span style="padding: 6px 16px; background: rgba(255,255,255,0.2); color: white; border-radius: 16px; font-size: 12px;">Bing</span>
+            <span style="padding: 6px 16px; background: rgba(255,255,255,0.2); color: white; border-radius: 16px; font-size: 12px;">360</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div style="background: white; padding: 24px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 500; color: rgba(0,0,0,0.87); letter-spacing: 0.15px;">热门推荐</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+          <div style="position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: box-shadow 0.3s;">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 12px; color: white; font-size: 14px; font-weight: 500;">风景</div>
+          </div>
+          <div style="position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 12px; color: white; font-size: 14px; font-weight: 500;">美女</div>
+          </div>
+          <div style="position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 12px; color: white; font-size: 14px; font-weight: 500;">动漫</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+  <h4 style="margin-top: 0;">主要区别</h4>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 14px;">
+    <div>
+      <h5 style="color: #1890ff; margin: 0 0 8px 0;">Ant Design</h5>
+      <ul style="margin: 0; padding-left: 20px; color: #666;">
+        <li>企业级设计语言</li>
+        <li>圆角较小 (2px)</li>
+        <li>阴影较轻</li>
+        <li>中文优化,字体适配好</li>
+        <li>组件丰富,文档完善</li>
+        <li>蓝色主题 (#1890ff)</li>
+      </ul>
+    </div>
+    <div>
+      <h5 style="color: #1976d2; margin: 0 0 8px 0;">Material-UI</h5>
+      <ul style="margin: 0; padding-left: 20px; color: #666;">
+        <li>Google Material Design</li>
+        <li>圆角较大 (4px)</li>
+        <li>阴影更明显,层次感强</li>
+        <li>国际化,Roboto 字体</li>
+        <li>动画效果更丰富</li>
+        <li>蓝色主题 (#1976d2)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 20px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+  <h4 style="margin-top: 0;">💡 我的建议</h4>
+  <p style="margin: 0; color: #666; font-size: 14px;">
+    对于壁纸网站,我推荐 <strong>Ant Design</strong>:
+  </p>
+  <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #666; font-size: 14px;">
+    <li>中文文档和社区支持更好</li>
+    <li>组件更适合国内用户习惯</li>
+    <li>轻量的阴影不会抢壁纸的视觉焦点</li>
+    <li>图片展示类网站不需要太重的 Material Design 风格</li>
+  </ul>
+</div>

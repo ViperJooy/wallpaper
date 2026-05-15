@@ -1,0 +1,118 @@
+<h2>选择一个布局风格</h2>
+<p class="subtitle">这些是不同的界面布局方向,点击你喜欢的风格</p>
+
+<div class="options">
+  <div class="option" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>极简现代</h3>
+      <div class="mockup" style="margin: 15px 0; background: #fafafa; padding: 20px; border-radius: 8px;">
+        <div class="mock-nav" style="margin-bottom: 30px; padding: 15px; background: white;">
+          <span style="font-weight: 600;">Wallpaper</span>
+          <span style="float: right; color: #666;">分类 | 搜索</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+        </div>
+      </div>
+      <p style="color: #666; font-size: 14px; margin-top: 10px;">
+        <strong>特点:</strong> 大量留白,宽松间距,每行 3-4 张,类似 Unsplash 风格
+      </p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="masonry" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>瀑布流画廊</h3>
+      <div class="mockup" style="margin: 15px 0; background: #fafafa; padding: 20px; border-radius: 8px;">
+        <div class="mock-nav" style="margin-bottom: 20px; padding: 12px; background: white;">
+          <span style="font-weight: 600;">Wallpaper</span>
+          <span style="float: right; color: #666;">分类 | 搜索</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+          <div class="placeholder" style="height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          <div class="placeholder" style="height: 160px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+          <div class="placeholder" style="height: 140px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+          <div class="placeholder" style="height: 130px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+          <div class="placeholder" style="height: 150px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+          <div class="placeholder" style="height: 125px; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);"></div>
+          <div class="placeholder" style="height: 135px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+          <div class="placeholder" style="height: 145px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);"></div>
+        </div>
+      </div>
+      <p style="color: #666; font-size: 14px; margin-top: 10px;">
+        <strong>特点:</strong> Pinterest 风格,紧密排列,不同高度,充分利用空间
+      </p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="category" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>分类导航为主</h3>
+      <div class="mockup" style="margin: 15px 0; background: #fafafa; padding: 20px; border-radius: 8px;">
+        <div class="mock-nav" style="margin-bottom: 20px; padding: 15px; background: white;">
+          <span style="font-weight: 600;">Wallpaper</span>
+        </div>
+        <div style="display: flex; gap: 15px;">
+          <div class="mock-sidebar" style="width: 200px; background: white; padding: 15px; border-radius: 6px;">
+            <div style="font-weight: 600; margin-bottom: 12px; font-size: 13px; color: #666;">分类</div>
+            <div style="padding: 8px; background: #667eea; color: white; border-radius: 4px; margin-bottom: 6px; font-size: 14px;">4K专区</div>
+            <div style="padding: 8px; color: #666; font-size: 14px; margin-bottom: 6px;">风景大片</div>
+            <div style="padding: 8px; color: #666; font-size: 14px; margin-bottom: 6px;">美女模特</div>
+            <div style="padding: 8px; color: #666; font-size: 14px;">动漫卡通</div>
+          </div>
+          <div style="flex: 1;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+              <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+              <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+              <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="color: #666; font-size: 14px; margin-top: 10px;">
+        <strong>特点:</strong> 左侧固定分类菜单,右侧内容区,传统但清晰
+      </p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="tabs" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>标签页切换</h3>
+      <div class="mockup" style="margin: 15px 0; background: #fafafa; padding: 20px; border-radius: 8px;">
+        <div class="mock-nav" style="margin-bottom: 20px; padding: 15px; background: white;">
+          <span style="font-weight: 600;">Wallpaper</span>
+          <span style="float: right; color: #666;">搜索</span>
+        </div>
+        <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+          <div style="display: flex; gap: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+            <span style="padding: 8px 16px; background: #667eea; color: white; border-radius: 4px 4px 0 0; font-size: 14px;">Bird</span>
+            <span style="padding: 8px 16px; color: #666; font-size: 14px;">Bing</span>
+            <span style="padding: 8px 16px; color: #666; font-size: 14px;">360</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+          <div class="placeholder" style="aspect-ratio: 16/9; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+        </div>
+      </div>
+      <p style="color: #666; font-size: 14px; margin-top: 10px;">
+        <strong>特点:</strong> 顶部标签页切换三个数据源,每个源独立展示
+      </p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+  <h4 style="margin-top: 0;">💡 提示</h4>
+  <p style="margin: 0; color: #666; font-size: 14px;">
+    这些只是初步的布局方向,选择后我们可以进一步细化。你也可以混合不同方案的元素。
+  </p>
+</div>
