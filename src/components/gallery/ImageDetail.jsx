@@ -175,9 +175,10 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
           {image.tag && (
             <Chip
               label={image.tag}
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              }}
+              sx={(theme) => ({
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                color: theme.palette.mode === 'dark' ? '#fff' : 'inherit',
+              })}
             />
           )}
 

@@ -115,10 +115,11 @@ function ImageCard({ image, onClick }) {
                 <Chip
                   label={image.tag}
                   size="small"
-                  sx={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  sx={(theme) => ({
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                    color: theme.palette.mode === 'dark' ? '#fff' : 'inherit',
                     maxWidth: '100%',
-                  }}
+                  })}
                 />
               )}
             </Box>
@@ -129,12 +130,13 @@ function ImageCard({ image, onClick }) {
                   size="small"
                   onClick={handlePreview}
                   aria-label={t('app.preview')}
-                  sx={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  sx={(theme) => ({
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                    color: theme.palette.mode === 'dark' ? '#fff' : 'inherit',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 1)',
+                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(60, 60, 60, 1)' : 'rgba(255, 255, 255, 1)',
                     },
-                  }}
+                  })}
                 >
                   <VisibilityIcon />
                 </IconButton>
@@ -144,12 +146,13 @@ function ImageCard({ image, onClick }) {
                   size="small"
                   onClick={handleDownload}
                   aria-label={t('app.download')}
-                  sx={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  sx={(theme) => ({
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                    color: theme.palette.mode === 'dark' ? '#fff' : 'inherit',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 1)',
+                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(60, 60, 60, 1)' : 'rgba(255, 255, 255, 1)',
                     },
-                  }}
+                  })}
                 >
                   <DownloadIcon />
                 </IconButton>

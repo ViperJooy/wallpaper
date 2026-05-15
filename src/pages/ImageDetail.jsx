@@ -70,7 +70,7 @@ function ImageDetail() {
               />
 
               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                <Chip label={`图片 ID: ${id}`} sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} />
+                <Chip label={`图片 ID: ${id}`} sx={(theme) => ({ backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)', color: theme.palette.mode === 'dark' ? '#fff' : 'inherit' })} />
                 <Button variant="contained" startIcon={<DownloadIcon />} onClick={handleDownload}>
                   下载壁纸
                 </Button>
