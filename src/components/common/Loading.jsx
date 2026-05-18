@@ -1,14 +1,17 @@
 import { Box, CircularProgress } from '@mui/material';
 
-function Loading({ size = 40, color = 'primary' }) {
+export const LOADING_INDICATOR_SIZE = 32;
+
+function Loading({ size = LOADING_INDICATOR_SIZE, color = 'primary', minHeight = 120 }) {
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '200px',
         width: '100%',
+        minHeight,
+        backgroundColor: 'transparent',
       }}
     >
       <CircularProgress size={size} color={color} />

@@ -6,7 +6,7 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import ImageGrid from '../components/gallery/ImageGrid';
 import ImageDetail from '../components/gallery/ImageDetail';
-import SkeletonGrid from '../components/common/SkeletonGrid';
+import Loading from '../components/common/Loading';
 import EmptyState from '../components/common/EmptyState';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import { useWallpapers } from '../hooks/useWallpapers';
@@ -73,7 +73,7 @@ function Category() {
           {error && safeWallpapers.length === 0 ? (
             <EmptyState title={t('app.loadFailed')} description={error} actionLabel={t('app.retry')} onAction={refresh} />
           ) : loading && safeWallpapers.length === 0 ? (
-            <SkeletonGrid count={12} />
+            <Loading />
           ) : safeWallpapers.length === 0 ? (
             <EmptyState title={t('app.noWallpapersInCategory')} />
           ) : (

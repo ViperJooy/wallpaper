@@ -5,7 +5,7 @@ import Footer from '../components/layout/Footer';
 import SearchBar from '../components/search/SearchBar';
 import ImageGrid from '../components/gallery/ImageGrid';
 import ImageDetail from '../components/gallery/ImageDetail';
-import SkeletonGrid from '../components/common/SkeletonGrid';
+import Loading from '../components/common/Loading';
 import EmptyState from '../components/common/EmptyState';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import { useWallpapers } from '../hooks/useWallpapers';
@@ -206,7 +206,7 @@ function Home() {
               onAction={isSearching ? () => search(searchKeyword) : refreshWallpapers}
             />
           ) : loading && displayImages.length === 0 ? (
-            <SkeletonGrid count={20} />
+            <Loading />
           ) : displayImages.length === 0 ? (
             <EmptyState
               title={isSearching ? t('app.noResults') : t('app.noWallpapers')}

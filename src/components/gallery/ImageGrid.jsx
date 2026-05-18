@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
+import Loading from '../common/Loading';
 import ImageCard from './ImageCard';
 
 function ImageGrid({ images = [], onLoadMore, hasMore = false, loading = false, onImageClick }) {
@@ -73,11 +74,12 @@ function ImageGrid({ images = [], onLoadMore, hasMore = false, loading = false, 
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: '100px',
+            minHeight: 96,
             mt: 3,
+            backgroundColor: 'transparent',
           }}
         >
-          {loading && <CircularProgress />}
+          {loading && <Loading minHeight={96} />}
         </Box>
       )}
     </Box>

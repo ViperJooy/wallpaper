@@ -40,7 +40,7 @@ function ImageCard({ image, onClick }) {
         cursor: 'pointer',
         borderRadius: 0.5,
         overflow: 'hidden',
-        backgroundColor: 'grey.200',
+        backgroundColor: 'transparent',
         outline: '2px solid transparent',
         outlineOffset: '2px',
         transition: 'box-shadow 0.3s ease, outline-color 0.3s ease',
@@ -66,15 +66,7 @@ function ImageCard({ image, onClick }) {
           sx={{
             width: '100%',
             paddingTop: '56.25%',
-            backgroundColor: 'action.hover',
-            '@media (prefers-reduced-motion: no-preference)': {
-              animation: 'shimmer 1.5s ease-in-out infinite',
-            },
-            '@keyframes shimmer': {
-              '0%': { opacity: 1 },
-              '50%': { opacity: 0.4 },
-              '100%': { opacity: 1 },
-            },
+            backgroundColor: 'transparent',
           }}
         />
       )}
