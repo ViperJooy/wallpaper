@@ -19,7 +19,7 @@ apiClient.interceptors.request.use(
 
 function upgradeHttpUrls(obj) {
   if (typeof obj === 'string') {
-    return obj.replace(/^http:\/\//, 'https://');
+    return obj;
   }
   if (Array.isArray(obj)) {
     return obj.map(upgradeHttpUrls);
