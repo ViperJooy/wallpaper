@@ -14,7 +14,8 @@ import { BIRD_CATEGORIES, QING_CATEGORIES } from '../constants/categories';
 import { useAppContext } from '../context/AppContext';
 
 function Category() {
-  const { t, currentSource } = useAppContext();
+  const { t, currentSource, darkMode } = useAppContext();
+  const isDark = darkMode;
   const { id } = useParams();
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -60,12 +61,35 @@ function Category() {
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
 
-        <Container maxWidth="xl" sx={{ flex: 1, py: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
-            <IconButton onClick={() => navigate('/')} aria-label={t('app.backHome')}>
+        <Container maxWidth="xl" sx={{ flex: 1, py: { xs: 3, md: 4 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 1.5 }}>
+            <IconButton
+              onClick={() => navigate('/')}
+              aria-label={t('app.backHome')}
+              sx={{
+                color: isDark ? '#F9FAFB' : '#000000',
+                backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                borderRadius: '9999px',
+                width: 44,
+                height: 44,
+                transition: 'all 150ms ease',
+                '&:hover': {
+                  backgroundColor: isDark ? '#4B5563' : '#E5E7EB',
+                },
+              }}
+            >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h4" sx={{ fontWeight: 600 }}>
+            <Typography
+              variant="h2"
+              sx={{
+                fontFamily: '"DM Sans", sans-serif',
+                fontWeight: 700,
+                fontSize: { xs: '1.25rem', md: '1.5rem' },
+                letterSpacing: '-0.015em',
+                color: isDark ? '#F9FAFB' : '#000000',
+              }}
+            >
               {category ? category.name : `${t('app.categoryPrefix')} ${id}`}
             </Typography>
           </Box>

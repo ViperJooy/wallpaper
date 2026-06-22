@@ -55,7 +55,7 @@ function ImageGrid({ images = [], onLoadMore, hasMore = false, loading = false, 
             lg: 'repeat(4, 1fr)',
             xl: 'repeat(5, 1fr)',
           },
-          gap: 1,
+          gap: { xs: 1.5, md: 2 },
         }}
       >
         {images.map((image, index) => (
