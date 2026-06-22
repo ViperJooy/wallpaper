@@ -16,6 +16,7 @@ import { useAppContext } from '../../context/AppContext';
 
 function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, hasNext }) {
   const { t, darkMode } = useAppContext();
+  const isDark = darkMode;
   const touchStartX = useRef(null);
 
   const handleDownload = useCallback(async () => {
@@ -72,6 +73,24 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
 
   if (!image) return null;
 
+  const navButtonSx = {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    color: isDark ? '#F9FAFB' : '#000000',
+    backgroundColor: isDark ? '#374151' : '#F3F4F6',
+    width: 44,
+    height: 44,
+    borderRadius: '9999px',
+    transition: 'all 150ms ease',
+    zIndex: 1,
+    '&:hover': {
+      backgroundColor: isDark ? '#4ADE80' : '#22C55E',
+      color: '#FFFFFF',
+      transform: 'translateY(-50%) scale(1.06)',
+    },
+  };
+
   return (
     <Dialog
       open={open}
@@ -80,7 +99,11 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
       fullScreen
       sx={{
         '& .MuiDialog-paper': {
-          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+          backgroundColor: isDark ? '#111827' : '#FFFFFF',
+          borderRadius: '20px',
+        },
+        '& .MuiBackdrop-root': {
+          backgroundColor: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
         },
       }}
     >
@@ -91,10 +114,18 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
           position: 'absolute',
           top: 16,
           right: 16,
-          color: 'white',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
+          color: isDark ? '#F9FAFB' : '#000000',
+          backgroundColor: isDark ? '#374151' : '#F3F4F6',
+          width: 44,
+          height: 44,
+          borderRadius: '9999px',
           zIndex: 1,
+          transition: 'all 150ms ease',
+          '&:hover': {
+            backgroundColor: '#EF4444',
+            color: '#FFFFFF',
+            transform: 'scale(1.06)',
+          },
         }}
       >
         <CloseIcon />
@@ -104,16 +135,7 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
         <IconButton
           onClick={onPrevious}
           aria-label="上一张"
-          sx={{
-            position: 'absolute',
-            left: { xs: 8, sm: 16 },
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'white',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-            zIndex: 1,
-          }}
+          sx={{ ...navButtonSx, left: { xs: 8, sm: 16 } }}
         >
           <ArrowBackIosNewIcon />
         </IconButton>
@@ -123,16 +145,7 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
         <IconButton
           onClick={onNext}
           aria-label="下一张"
-          sx={{
-            position: 'absolute',
-            right: { xs: 8, sm: 16 },
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'white',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-            zIndex: 1,
-          }}
+          sx={{ ...navButtonSx, right: { xs: 8, sm: 16 } }}
         >
           <ArrowForwardIosIcon />
         </IconButton>
@@ -158,7 +171,7 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
             maxWidth: '100%',
             maxHeight: { xs: 'calc(100vh - 150px)', sm: 'calc(100vh - 200px)' },
             objectFit: 'contain',
-            borderRadius: 1,
+            borderRadius: '20px',
           }}
         />
 
@@ -176,8 +189,10 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
             <Chip
               label={image.tag}
               sx={{
-                backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                color: darkMode ? '#fff' : 'inherit',
+                backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                color: isDark ? '#F9FAFB' : '#000000',
+                fontWeight: 500,
+                borderRadius: '20px',
               }}
             />
           )}
@@ -186,7 +201,12 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
             variant="contained"
             startIcon={<DownloadIcon />}
             onClick={handleDownload}
-            sx={{ ml: { sm: 'auto' } }}
+            sx={{
+              ml: { sm: 'auto' },
+              borderRadius: '12px',
+              px: 4,
+              minHeight: 48,
+            }}
           >
             {t('app.download')}
           </Button>

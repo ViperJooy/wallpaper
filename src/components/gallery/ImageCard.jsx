@@ -11,6 +11,8 @@ function ImageCard({ image, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const isDark = darkMode;
+
   const handleDownload = useCallback(async (e) => {
     e.stopPropagation();
     const filename = `wallpaper-${image.id || Date.now()}.jpg`;
@@ -38,21 +40,22 @@ function ImageCard({ image, onClick }) {
       sx={{
         position: 'relative',
         cursor: 'pointer',
-        borderRadius: 0.5,
+        borderRadius: '20px',
         overflow: 'hidden',
-        backgroundColor: 'transparent',
-        outline: '2px solid transparent',
-        outlineOffset: '2px',
-        transition: 'box-shadow 0.3s ease, outline-color 0.3s ease',
+        backgroundColor: isDark ? '#1F2937' : '#F3F4F6',
+        transition: 'transform 150ms ease, box-shadow 150ms ease',
         '@media (hover: hover)': {
           '&:hover': {
-            boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-            outlineColor: 'primary.main',
+            transform: 'scale(1.02)',
+            boxShadow: isDark
+              ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+              : '0 4px 20px rgba(0, 0, 0, 0.08)',
           },
         },
         '&:focus-visible': {
-          outlineColor: 'primary.main',
-          boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.3)',
+          outline: '2px solid',
+          outlineColor: isDark ? '#4ADE80' : '#22C55E',
+          outlineOffset: '2px',
         },
       }}
       onMouseEnter={() => setIsHovered(true)}
@@ -66,7 +69,7 @@ function ImageCard({ image, onClick }) {
           sx={{
             width: '100%',
             paddingTop: '56.25%',
-            backgroundColor: 'transparent',
+            backgroundColor: isDark ? '#1F2937' : '#F3F4F6',
           }}
         />
       )}
@@ -82,76 +85,95 @@ function ImageCard({ image, onClick }) {
           width: '100%',
           height: 'auto',
           opacity: imageLoaded ? 1 : 0,
-          transition: 'opacity 0.3s ease',
+          transition: 'opacity 200ms ease',
         }}
       />
 
-        {isHovered && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              padding: 2,
-              transition: 'opacity 0.3s ease',
-            }}
-          >
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              {image.tag && (
-                <Chip
-                  label={image.tag}
-                  size="small"
-                  sx={{
-                    backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                    color: darkMode ? '#fff' : 'inherit',
-                    maxWidth: '100%',
-                  }}
-                />
-              )}
-            </Box>
+      {/* Hover overlay */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: isDark
+            ? 'linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%)'
+            : 'linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: 1.5,
+          opacity: isHovered ? 1 : 0,
+          transition: 'opacity 150ms ease',
+          pointerEvents: isHovered ? 'auto' : 'none',
+        }}
+      >
+        {/* Tag */}
+        <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap' }}>
+          {image.tag && (
+            <Chip
+              label={image.tag}
+              size="small"
+              sx={{
+                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                color: isDark ? '#F9FAFB' : '#000000',
+                fontWeight: 500,
+                fontSize: '0.75rem',
+                height: 28,
+                borderRadius: '20px',
+                '& .MuiChip-label': { px: 1 },
+              }}
+            />
+          )}
+        </Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-              <Tooltip title={t('app.preview')}>
-                <IconButton
-                  size="small"
-                  onClick={handlePreview}
-                  aria-label={t('app.preview')}
-                  sx={{
-                    backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                    color: darkMode ? '#fff' : 'inherit',
-                    '&:hover': {
-                      backgroundColor: darkMode ? 'rgba(60, 60, 60, 1)' : 'rgba(255, 255, 255, 1)',
-                    },
-                  }}
-                >
-                  <VisibilityIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t('app.download')}>
-                <IconButton
-                  size="small"
-                  onClick={handleDownload}
-                  aria-label={t('app.download')}
-                  sx={{
-                    backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                    color: darkMode ? '#fff' : 'inherit',
-                    '&:hover': {
-                      backgroundColor: darkMode ? 'rgba(60, 60, 60, 1)' : 'rgba(255, 255, 255, 1)',
-                    },
-                  }}
-                >
-                  <DownloadIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </Box>
-        )}
+        {/* Action buttons */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+          <Tooltip title={t('app.preview')}>
+            <IconButton
+              size="small"
+              onClick={handlePreview}
+              aria-label={t('app.preview')}
+              sx={{
+                width: 44,
+                height: 44,
+                borderRadius: '9999px',
+                backgroundColor: isDark ? '#4ADE80' : '#22C55E',
+                color: '#FFFFFF',
+                transition: 'all 150ms ease',
+                '&:hover': {
+                  backgroundColor: isDark ? '#22C55E' : '#16A34A',
+                  transform: 'scale(1.06)',
+                },
+              }}
+            >
+              <VisibilityIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={t('app.download')}>
+            <IconButton
+              size="small"
+              onClick={handleDownload}
+              aria-label={t('app.download')}
+              sx={{
+                width: 44,
+                height: 44,
+                borderRadius: '9999px',
+                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                color: isDark ? '#F9FAFB' : '#000000',
+                transition: 'all 150ms ease',
+                '&:hover': {
+                  backgroundColor: isDark ? '#374151' : '#FFFFFF',
+                  transform: 'scale(1.06)',
+                },
+              }}
+            >
+              <DownloadIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Box>
     </Box>
   );
 }

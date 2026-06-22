@@ -22,7 +22,7 @@ export const AppProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
     if (saved !== null) return saved === 'true';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return false; // ChatBubble: light-first, always default to light
   });
   const [lang, setLang] = useState(() => {
     return localStorage.getItem('lang') || 'zh';

@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Container, IconButton, Button, Chip, Paper } from '@mui/material';
+import { Box, Container, IconButton, Button, Chip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import ErrorBoundary from '../components/common/ErrorBoundary';
@@ -13,6 +14,7 @@ function ImageDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { darkMode } = useAppContext();
+  const isDark = darkMode;
 
   const handleDownload = async () => {
     const imageUrl = getFullUrl(id);
@@ -25,59 +27,102 @@ function ImageDetail() {
 
   return (
     <ErrorBoundary>
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'grey.900' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
 
-        <Container maxWidth="xl" sx={{ flex: 1, py: 4 }}>
-          <Box sx={{ position: 'relative' }}>
+        <Container maxWidth="xl" sx={{ flex: 1, py: { xs: 3, md: 4 } }}>
+          {/* Top bar */}
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mb: 2,
+          }}>
+            <IconButton
+              onClick={handleClose}
+              aria-label="返回"
+              sx={{
+                color: isDark ? '#F9FAFB' : '#000000',
+                backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                borderRadius: '9999px',
+                width: 44,
+                height: 44,
+                transition: 'all 150ms ease',
+                '&:hover': {
+                  backgroundColor: isDark ? '#4B5563' : '#E5E7EB',
+                },
+              }}
+            >
+              <ArrowBackIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+
             <IconButton
               onClick={handleClose}
               aria-label="关闭"
               sx={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                color: 'white',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                color: isDark ? '#F9FAFB' : '#000000',
+                backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                borderRadius: '9999px',
+                width: 44,
+                height: 44,
+                transition: 'all 150ms ease',
                 '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  backgroundColor: '#EF4444',
+                  color: '#FFFFFF',
                 },
-                zIndex: 1,
               }}
             >
-              <CloseIcon />
+              <CloseIcon sx={{ fontSize: 20 }} />
             </IconButton>
+          </Box>
 
-            <Paper
-              elevation={3}
+          {/* Image container */}
+          <Box
+            sx={{
+              backgroundColor: isDark ? '#1F2937' : '#F3F4F6',
+              borderRadius: '20px',
+              p: { xs: 1.5, md: 3 },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 3,
+            }}
+          >
+            <Box
+              component="img"
+              src={getFullUrl(id)}
+              alt={`壁纸 ${id}`}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 3,
-                p: 3,
-                backgroundColor: 'grey.800',
+                maxWidth: '100%',
+                maxHeight: 'calc(100vh - 320px)',
+                objectFit: 'contain',
+                borderRadius: '20px',
               }}
-            >
-              <Box
-                component="img"
-                src={getFullUrl(id)}
-                alt={`壁纸 ${id}`}
+            />
+
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Chip
+                label={`图片 ID: ${id}`}
                 sx={{
-                  maxWidth: '100%',
-                  maxHeight: 'calc(100vh - 300px)',
-                  objectFit: 'contain',
-                  borderRadius: 1,
+                  backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                  color: isDark ? '#F9FAFB' : '#000000',
+                  fontWeight: 500,
+                  borderRadius: '20px',
                 }}
               />
-
-              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                <Chip label={`图片 ID: ${id}`} sx={{ backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)', color: darkMode ? '#fff' : 'inherit' }} />
-                <Button variant="contained" startIcon={<DownloadIcon />} onClick={handleDownload}>
-                  下载壁纸
-                </Button>
-              </Box>
-            </Paper>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={handleDownload}
+                sx={{
+                  borderRadius: '12px',
+                  px: 4,
+                  minHeight: 48,
+                }}
+              >
+                下载壁纸
+              </Button>
+            </Box>
           </Box>
         </Container>
 

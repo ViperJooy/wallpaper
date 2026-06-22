@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Container, Typography, Chip, Stack, Tabs, Tab } from '@mui/material';
+import { Box, Container, Typography, Chip, Tabs, Tab } from '@mui/material';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import SearchBar from '../components/search/SearchBar';
@@ -15,7 +15,7 @@ import { BIRD_CATEGORIES, QING_CATEGORIES } from '../constants/categories';
 import { SOURCES, BING_MONTHS } from '../constants/sources';
 
 function Home() {
-  const { searchKeyword, setSearchKeyword, t, currentSource, setCurrentSource } = useAppContext();
+  const { searchKeyword, setSearchKeyword, t, currentSource, setCurrentSource, darkMode } = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -99,35 +99,38 @@ function Home() {
   const currentCatId = currentSource === 'qing' ? qingCategoryId : birdCategoryId;
   const setCurrentCatId = currentSource === 'qing' ? setQingCategoryId : setBirdCategoryId;
 
+  const isDark = darkMode;
+
   return (
     <ErrorBoundary>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
 
-        <Box
-          sx={(theme) => ({
-            background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.light} 100%)`,
-            color: 'white',
-            py: { xs: 4, md: 6 },
-            px: 2,
-          })}
-        >
+        {/* Hero — friendly, clean */}
+        <Box sx={{ py: { xs: 4, md: 6 }, px: 2 }}>
           <Container maxWidth="md">
             <Typography
               variant="h2"
               align="center"
               sx={{
-                fontWeight: 700,
-                mb: 2,
+                fontFamily: '"DM Sans", sans-serif',
+                fontWeight: 800,
+                mb: 1,
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                letterSpacing: '-0.02em',
+                color: isDark ? '#F9FAFB' : '#000000',
               }}
             >
               {t('app.title')}
             </Typography>
             <Typography
-              variant="subtitle1"
+              variant="body1"
               align="center"
-              sx={{ mb: 4, opacity: 0.9, fontSize: { xs: '1rem', md: '1.25rem' } }}
+              sx={{
+                mb: 4,
+                color: isDark ? '#9CA3AF' : '#6B7280',
+                fontSize: { xs: '0.9375rem', md: '1.0625rem' },
+              }}
             >
               {t('app.tagline')}
             </Typography>
@@ -140,24 +143,35 @@ function Home() {
           </Container>
         </Box>
 
-        <Container maxWidth="xl" sx={{ flex: 1, py: 4 }}>
+        {/* Content */}
+        <Container maxWidth="xl" sx={{ flex: 1, py: { xs: 3, md: 4 } }}>
           <Tabs
             value={currentSource}
             onChange={handleSourceChange}
             centered
-            sx={{ mb: 3 }}
+            sx={{
+              mb: 3,
+              '& .MuiTabs-indicator': {
+                backgroundColor: isDark ? '#4ADE80' : '#22C55E',
+                height: 3,
+                borderRadius: '3px 3px 0 0',
+              },
+            }}
           >
             {SOURCES.map(s => (
-              <Tab key={s.id} value={s.id} label={s.label} />
+              <Tab key={s.id} value={s.id} label={s.label} sx={{ color: isDark ? '#9CA3AF' : '#6B7280' }} />
             ))}
           </Tabs>
 
           {!isSearching && showCategories && (
             <>
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+              <Typography
+                variant="overline"
+                sx={{ mb: 1.5, display: 'block', color: isDark ? '#9CA3AF' : '#6B7280' }}
+              >
                 {t('app.hotRecommend')}
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
                 {currentCategories.map(cat => (
                   <Chip
                     key={cat.id}
@@ -166,18 +180,24 @@ function Home() {
                     color={currentCatId === cat.id ? 'primary' : 'default'}
                     onClick={() => setCurrentCatId(cat.id)}
                     clickable
+                    sx={{
+                      fontWeight: currentCatId === cat.id ? 600 : 400,
+                    }}
                   />
                 ))}
-              </Stack>
+              </Box>
             </>
           )}
 
           {!isSearching && currentSource === 'bing' && (
             <>
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+              <Typography
+                variant="overline"
+                sx={{ mb: 1.5, display: 'block', color: isDark ? '#9CA3AF' : '#6B7280' }}
+              >
                 {t('app.hotRecommend')}
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
                 {BING_MONTHS.map(m => (
                   <Chip
                     key={m.id}
@@ -186,14 +206,21 @@ function Home() {
                     color={bingMonth === m.id ? 'primary' : 'default'}
                     onClick={() => setBingMonth(m.id)}
                     clickable
+                    sx={{
+                      fontWeight: bingMonth === m.id ? 600 : 400,
+                    }}
                   />
                 ))}
-              </Stack>
+              </Box>
             </>
           )}
 
           {isSearching && (
-            <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }} aria-live="polite">
+            <Typography
+              variant="overline"
+              sx={{ mb: 3, display: 'block', color: isDark ? '#9CA3AF' : '#6B7280' }}
+              aria-live="polite"
+            >
               {t('app.searchResult')}: "{searchKeyword}"
             </Typography>
           )}
