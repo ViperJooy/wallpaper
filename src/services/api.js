@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toSecureImageUrl } from '../utils/imageUrl';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'https://wp.shanhutech.cn/intf',
@@ -19,7 +20,7 @@ apiClient.interceptors.request.use(
 
 function upgradeHttpUrls(obj) {
   if (typeof obj === 'string') {
-    return obj;
+    return toSecureImageUrl(obj);
   }
   if (Array.isArray(obj)) {
     return obj.map(upgradeHttpUrls);

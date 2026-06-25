@@ -5,17 +5,16 @@ export default defineConfig({
   timeout: 60000,
   retries: 1,
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://127.0.0.1:5173',
     headless: true,
     viewport: { width: 1280, height: 720 },
     launchOptions: {
-      executablePath: '/usr/bin/google-chrome',
       args: ['--no-sandbox', '--disable-gpu'],
     },
   },
   webServer: {
-    command: 'npx vite --port 5173',
-    url: 'http://localhost:5173',
+    command: 'npx vite --host 127.0.0.1 --port 5173',
+    url: 'http://127.0.0.1:5173',
     reuseExistingServer: true,
     timeout: 30000,
   },

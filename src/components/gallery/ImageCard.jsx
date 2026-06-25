@@ -3,21 +3,24 @@ import { Box, Chip, IconButton, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { downloadImage } from '../../utils/download';
-import { getThumbUrl } from '../../utils/imageUrl';
+import { getThumbUrl, toSecureImageUrl } from '../../utils/imageUrl';
 import { useAppContext } from '../../context/AppContext';
 
 function ImageCard({ image, onClick }) {
   const { t, darkMode } = useAppContext();
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
 
   const isDark = darkMode;
+  const imageUrl = toSecureImageUrl(image.url || image.img);
+  const thumbUrl = image.thumb ? toSecureImageUrl(image.thumb) : getThumbUrl(imageUrl);
 
   const handleDownload = useCallback(async (e) => {
     e.stopPropagation();
     const filename = `wallpaper-${image.id || Date.now()}.jpg`;
-    await downloadImage(image.url || image.img, filename);
-  }, [image]);
+    await downloadImage(imageUrl, filename);
+  }, [image, imageUrl]);
 
   const handlePreview = useCallback((e) => {
     e.stopPropagation();
@@ -75,19 +78,44 @@ function ImageCard({ image, onClick }) {
       )}
       <Box
         component="img"
-        src={image.thumb || getThumbUrl(image.url || image.img)}
+        src={thumbUrl}
         alt={image.tag || '壁纸'}
         loading="lazy"
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setImageLoaded(true)}
+        onLoad={() => {
+          setImageLoaded(true);
+          setImageFailed(false);
+        }}
+        onError={() => {
+          setImageLoaded(true);
+          setImageFailed(true);
+        }}
         sx={{
           display: 'block',
           width: '100%',
           height: 'auto',
-          opacity: imageLoaded ? 1 : 0,
+          opacity: imageLoaded && !imageFailed ? 1 : 0,
           transition: 'opacity 200ms ease',
         }}
       />
+      {imageFailed && (
+        <Box
+          role="status"
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: 1,
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            color: isDark ? '#F9FAFB' : '#374151',
+            backgroundColor: isDark ? '#1F2937' : '#F3F4F6',
+          }}
+        >
+          图片加载失败
+        </Box>
+      )}
 
       {/* Hover overlay */}
       <Box

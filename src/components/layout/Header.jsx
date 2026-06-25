@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Tooltip, Divider } from '@mui/material';
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
 import PaletteIcon from '@mui/icons-material/Palette';
@@ -13,13 +13,6 @@ import { languages } from '../../i18n';
 function Header() {
   const { themeName, setThemeName, darkMode, toggleDarkMode, lang, toggleLang, t } = useAppContext();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const isDark = darkMode;
 

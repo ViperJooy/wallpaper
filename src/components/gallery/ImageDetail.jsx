@@ -12,19 +12,21 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { downloadImage } from '../../utils/download';
+import { toSecureImageUrl } from '../../utils/imageUrl';
 import { useAppContext } from '../../context/AppContext';
 
 function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, hasNext }) {
   const { t, darkMode } = useAppContext();
   const isDark = darkMode;
   const touchStartX = useRef(null);
+  const imageUrl = toSecureImageUrl(image?.url || image?.img);
 
   const handleDownload = useCallback(async () => {
     if (image) {
       const filename = `wallpaper-${image.id || Date.now()}.jpg`;
-      await downloadImage(image.url || image.img, filename);
+      await downloadImage(imageUrl, filename);
     }
-  }, [image]);
+  }, [image, imageUrl]);
 
   const handleKeyDown = useCallback(
     (e) => {
@@ -165,7 +167,7 @@ function ImageDetail({ image, open, onClose, onPrevious, onNext, hasPrevious, ha
       >
         <Box
           component="img"
-          src={image.url || image.img}
+          src={imageUrl}
           alt={image.tag || '壁纸'}
           sx={{
             maxWidth: '100%',
