@@ -11,7 +11,7 @@ function buildImageUrl(path) {
 }
 
 function buildThumbUrl(path) {
-  return `https://p0.qhimg.com/bdr/__200/${path}.jpg`;
+  return `https://p0.qhimg.com/bdm/480_300_85/${path}.jpg`;
 }
 
 function build4kUrl(path) {

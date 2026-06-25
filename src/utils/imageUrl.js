@@ -11,7 +11,12 @@ export function getThumbUrl(url) {
   const secureUrl = toSecureImageUrl(url);
 
   if (secureUrl.includes('qhimg.com')) {
-    return secureUrl.replace(/\/bdr\/__\d+/, '/bdr/__200');
+    // /bdm/ 路径支持按尺寸缩放，替换为列表缩略图尺寸
+    if (secureUrl.includes('/bdm/')) {
+      return secureUrl.replace(/\/bdm\/\d+_\d+_\d+\//, '/bdm/480_300_85/');
+    }
+    // /bdr/ 路径不支持缩放，转换为 /bdm/ 格式
+    return secureUrl.replace(/\/bdr\/[^/]+\//, '/bdm/480_300_85/');
   }
 
   if (secureUrl.includes('bing.com/th')) {
